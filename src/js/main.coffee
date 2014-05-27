@@ -1,7 +1,7 @@
 module = require './module'
 
-App = ->
-  foo: ->
-    'bareedsdedededaaaa'
+class App
+  constructor: ->
+    console.log module.get()
 
-module.exports = App
+new App

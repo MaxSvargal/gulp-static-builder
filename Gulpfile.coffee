@@ -12,11 +12,14 @@ jade = require 'gulp-jade'
 imagemin = require 'gulp-imagemin'
 connect = require 'connect'
 connect_lr = require 'connect-livereload'
+streamify = require 'gulp-streamify'
 
 paths =
   src:
     root: './src/'
-    scripts: './src/js/main.coffee'
+    scripts: 
+      main: './src/js/main.coffee'
+      all: './src/js/**/*.coffee'
     styles: './src/css/main.styl'
     images: './src/img/**/*'
     templates: 
@@ -29,13 +32,6 @@ paths =
       output_file: 'main.js'
     styles: './public/css/'
     images: './public/img/'
-  build:
-    root: './build/'
-    scripts:
-      output_dir: './build/js/'
-      output_file: 'main.js'
-    styles: './build/css/'
-    images: './build/img/'
 
 handleErrors = ->
   args = Array::slice.call arguments
@@ -49,17 +45,17 @@ handleErrors = ->
 # Scripts
 gulp.task 'browserify', ->
   params =
-    entries: [paths.src.scripts]
+    entries: [paths.src.scripts.main]
     extensions: ['.coffee']
 
   browserify params
     .transform coffeeify # CoffeeScript compile
     .bundle { debug: true } # Bundle to source stream
     .on 'error', handleErrors # Catch errors
-    .pipe cache('browserified')
     .pipe source(paths.dest.scripts.output_file) # Output filename
+    .pipe streamify(cache('browserified')) # Cache results
     .pipe gulp.dest(paths.dest.scripts.output_dir) # Piping stream to task
-    .pipe remember('browserified')
+    .pipe remember('browserified') # Remember files update time
     .pipe livereload()
 
 
@@ -105,11 +101,11 @@ gulp.task 'server', ->
 
 # Watch tasks
 gulp.task 'watch', ->
-  gulp.watch paths.src.scripts, ['browserify']
+  gulp.watch paths.src.scripts.all, ['browserify']
   gulp.watch paths.src.styles, ['stylus']
   gulp.watch paths.src.templates.all, ['jade']
   gulp.watch paths.src.images, ['images']
 
-gulp.task 'default', ['stylus', 'jade', 'images', 'watch', 'server']
+gulp.task 'default', ['stylus', 'jade', 'images', 'browserify', 'watch', 'server']
 
 require './GuilpfileProd'

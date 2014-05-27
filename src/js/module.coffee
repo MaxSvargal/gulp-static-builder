@@ -1,2 +1,4 @@
-module.exports = ->
-  'Module loaded'
+module.exports = {
+  get: ->
+    'Module loaded'
+}
