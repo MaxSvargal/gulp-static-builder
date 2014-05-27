@@ -8,17 +8,16 @@
   },
   "keywords": [
     "static",
-    "build"
+    "build",
+    "gulp"
   ],
   "author": "MaxSvargal",
   "license": "MIT",
   "devDependencies": {
-    "gulp-concat": "~2.2.0",
     "gulp-uglify": "~0.3.0",
     "gulp": "~3.6.2",
     "gulp-livereload": "~1.5.0",
     "gulp-jade": "~0.5.0",
-    "gulp-myth": "~0.3.1",
     "gulp-stylus": "~1.0.1",
     "connect": "~2.17.1",
     "gulp-csso": "~0.2.8",
