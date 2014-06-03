@@ -1,18 +1,19 @@
+'use strict'
+
 gulp = require 'gulp'
-cache = require 'gulp-cached'
-remember = require 'gulp-remember'
+
+# Load gulp plugins
+$ = require('gulp-load-plugins')()
+
+# Another modules
 source = require 'vinyl-source-stream'
 browserify = require 'browserify'
 coffeeify = require 'coffeeify'
-livereload = require 'gulp-livereload'
-notify = require 'gulp-notify'
-stylus = require 'gulp-stylus'
 nib = require 'nib'
-jade = require 'gulp-jade'
-imagemin = require 'gulp-imagemin'
 connect = require 'connect'
 connect_lr = require 'connect-livereload'
-streamify = require 'gulp-streamify'
+
+# Helpers
 jade_helpers = require './src/helpers/jade_helpers'
 
 paths =
@@ -36,7 +37,7 @@ paths =
 
 handleErrors = ->
   args = Array::slice.call arguments
-  notify.onError(
+  $.notify.onError(
     title: 'Compile error'
     message: '<%= error.message %>'
   ).apply this, args
@@ -54,41 +55,41 @@ gulp.task 'browserify', ->
     .bundle { debug: true } # Bundle to source stream
     .on 'error', handleErrors # Catch errors
     .pipe source(paths.dest.scripts.output_file) # Output filename
-    .pipe streamify(cache('browserified')) # Cache results
+    .pipe $.streamify($.cached('browserified')) # Cache results
     .pipe gulp.dest(paths.dest.scripts.output_dir) # Piping stream to task
-    .pipe remember('browserified') # Remember files update time
-    .pipe livereload()
+    .pipe $.remember('browserified') # Remember files update time
+    .pipe $.livereload()
 
 
 # Styles
 gulp.task 'stylus', ->
   gulp.src paths.src.styles
-    .pipe stylus
+    .pipe $.stylus
       use: [nib()]
     .on 'error', handleErrors
-    .pipe cache('stylused')
+    .pipe $.cached('stylused')
     .pipe gulp.dest(paths.dest.styles)
-    .pipe remember('stylused')
-    .pipe livereload()
+    .pipe $.remember('stylused')
+    .pipe $.livereload()
 
 
 # Templates
 gulp.task 'jade', ->
   gulp.src paths.src.templates.compiled
-    .pipe jade
+    .pipe $.jade
       pretty: true
       data: jade_helpers
     .on 'error', handleErrors
-    .pipe cache('jaded')
+    .pipe $.cached('jaded')
     .pipe gulp.dest(paths.dest.root)
-    .pipe remember('jaded')
-    .pipe livereload()
+    .pipe $.remember('jaded')
+    .pipe $.livereload()
 
 
 # Images
 gulp.task 'images', ->
   gulp.src paths.src.images
-    .pipe imagemin()
+    .pipe $.imagemin()
     .pipe gulp.dest(paths.dest.images)
 
 

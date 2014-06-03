@@ -1,14 +1,17 @@
+'use strict'
+
 gulp = require 'gulp'
+
+# Load gulp plugins
+$ = require('gulp-load-plugins')()
+
+# Another modules
 source = require 'vinyl-source-stream'
 browserify = require 'browserify'
 coffeeify = require 'coffeeify'
-stylus = require 'gulp-stylus'
 nib = require 'nib'
-jade = require 'gulp-jade'
-imagemin = require 'gulp-imagemin'
-csso = require 'gulp-csso'
-uglify = require 'gulp-uglify'
-streamify = require 'gulp-streamify'
+
+# Helpers
 jade_helpers = require './src/helpers/jade_helpers'
 
 paths =
@@ -38,23 +41,23 @@ gulp.task 'build', ->
     .transform coffeeify
     .bundle()
     .pipe source(paths.dest.scripts.output_file)
-    .pipe streamify(uglify())
+    .pipe $.streamify($.uglify())
     .pipe gulp.dest(paths.dest.scripts.output_dir)
 
   # Styles
   gulp.src paths.src.styles
-    .pipe stylus
+    .pipe $.stylus
       use: [nib()]
-    .pipe csso()
+    .pipe $.csso()
     .pipe gulp.dest(paths.dest.styles)
 
   # Templates
   gulp.src paths.src.templates.compiled
-    .pipe jade
+    .pipe $.jade
       data: jade_helpers
     .pipe gulp.dest(paths.dest.root)
 
   # Images
   gulp.src paths.src.images
-    .pipe imagemin()
+    .pipe $.imagemin()
     .pipe gulp.dest(paths.dest.images)

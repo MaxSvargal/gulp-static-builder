@@ -33,6 +33,7 @@
     "connect-livereload": "~0.4.0",
     "gulp-cached": "0.0.3",
     "gulp-remember": "~0.2.0",
-    "gulp-streamify": "0.0.5"
+    "gulp-streamify": "0.0.5",
+    "gulp-load-plugins": "~0.5.1"
   }
 }
