@@ -13,6 +13,7 @@ imagemin = require 'gulp-imagemin'
 connect = require 'connect'
 connect_lr = require 'connect-livereload'
 streamify = require 'gulp-streamify'
+jade_helpers = require './src/helpers/jade_helpers'
 
 paths =
   src:
@@ -23,8 +24,8 @@ paths =
     styles: './src/css/main.styl'
     images: './src/img/**/*'
     templates: 
-      all: './src/tpl/**/*'
-      compiled: ['./src/tpl/*.jade', '!./src/tpl/_*.jade']
+      all: './src/tpl/**/*.jade'
+      compiled: ['./src/tpl/**/*.jade', '!./src/tpl/**/_*.jade']
   dest: 
     root: './public/'
     scripts:
@@ -76,6 +77,7 @@ gulp.task 'jade', ->
   gulp.src paths.src.templates.compiled
     .pipe jade
       pretty: true
+      data: jade_helpers
     .on 'error', handleErrors
     .pipe cache('jaded')
     .pipe gulp.dest(paths.dest.root)

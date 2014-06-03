@@ -1,7 +1,7 @@
 gulp-static-builder
 ===================
 
-Gulp config file for build static site with Jade, Stylus, CoffeeScript (Browserify)
+Gulp config file to build static sites with Jade, Stylus, CoffeeScript (Browserify)
 
 # How to
 ```sh

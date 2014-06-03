@@ -9,6 +9,7 @@ imagemin = require 'gulp-imagemin'
 csso = require 'gulp-csso'
 uglify = require 'gulp-uglify'
 streamify = require 'gulp-streamify'
+jade_helpers = require './src/helpers/jade_helpers'
 
 paths =
   src:
@@ -49,7 +50,8 @@ gulp.task 'build', ->
 
   # Templates
   gulp.src paths.src.templates.compiled
-    .pipe jade()
+    .pipe jade
+      data: jade_helpers
     .pipe gulp.dest(paths.dest.root)
 
   # Images
