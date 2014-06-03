@@ -59,5 +59,9 @@ gulp.task 'build', ->
 
   # Images
   gulp.src paths.src.images
-    .pipe $.imagemin()
+    .pipe $.cached($.imagemin(
+        optimizationLevel: 3
+        progressive: true
+        interlaced: true
+    ))
     .pipe gulp.dest(paths.dest.images)

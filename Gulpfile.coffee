@@ -59,6 +59,7 @@ gulp.task 'browserify', ->
     .pipe gulp.dest(paths.dest.scripts.output_dir) # Piping stream to task
     .pipe $.remember('browserified') # Remember files update time
     .pipe $.livereload()
+    .pipe $.size()
 
 
 # Styles
@@ -71,6 +72,7 @@ gulp.task 'stylus', ->
     .pipe gulp.dest(paths.dest.styles)
     .pipe $.remember('stylused')
     .pipe $.livereload()
+    .pipe $.size()
 
 
 # Templates
@@ -84,13 +86,19 @@ gulp.task 'jade', ->
     .pipe gulp.dest(paths.dest.root)
     .pipe $.remember('jaded')
     .pipe $.livereload()
+    .pipe $.size()
 
 
 # Images
 gulp.task 'images', ->
   gulp.src paths.src.images
-    .pipe $.imagemin()
+    .pipe $.cached($.imagemin(
+        optimizationLevel: 3
+        progressive: true
+        interlaced: true
+    ))
     .pipe gulp.dest(paths.dest.images)
+    .pipe $.size()
 
 
 # Web server
@@ -98,6 +106,7 @@ gulp.task 'server', ->
   connect()
     .use connect_lr()
     .use connect.static(paths.dest.root)
+    .use connect.directory(paths.dest.root)
     .listen 9000
   console.log 'Server listening on http://localhost:9000'
 
